@@ -6,40 +6,22 @@ $(document).ready(function() {
     var guessesLeft = 9;
     var listOfGuesses = [];
     var count = 0;
+    var found = false;
 
-    //this function takes the letters inside of listofGuesses and puts them in the html
-    function consoleInside(arr) {
-        if (listOfGuesses[0]) {
-            $('#guesses').append(arr[count] + ', ');
-            count++;
-        }else {
-            count = 0;
-        }
-    };
-    
-
-    document.onkeyup = function () {
-        var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
-        var found = false; 
-        
-        // checks to see if the userGuess is inside the array listofGuesses, if it is the program won't proceed
-        //the "break" command ends the loop
-        for( var y = 0; y < listOfGuesses.length; y++){
-            if (listOfGuesses[y] === userGuess) {
+    document.onkeyup = function (event) {
+        var userGuess = event.key;
+            // checks to see if the userGuess is inside the array listofGuesses, if it is the program won't proceed
+            //the "break" command ends the loop
+            if ((listOfGuesses.includes(userGuess) == true) && (compChoices.includes(userGuess) == true)) {
                 found = true;
-                break;
             } else {
                 found = false;
             }
-        }
         if (found === false) {
-
-            if ((userGuess === "a") || (userGuess === "b") || (userGuess === "c") || (userGuess === "d") || (userGuess === "e") || (userGuess === "f") || (userGuess === "g") || (userGuess === "h") || (userGuess === "i") || (userGuess === "j") || (userGuess === "k") || (userGuess === "l") || (userGuess === "m") || (userGuess === "n") || (userGuess === "o") || (userGuess === "p") || (userGuess === "q") || (userGuess === "r") || (userGuess === "s") || (userGuess === "t") || (userGuess === "u") || (userGuess === "v") || (userGuess === "w") || (userGuess === "x") || (userGuess === "y") || (userGuess === "z")) {
-
+            if (compChoices.includes(userGuess)) {
                 if (userGuess === compGuess) {
                     wins++;
                     alert("You won!!!  The letter was: " + compGuess);
-                    
                     //reset
                     guessesLeft = 9;
                     compGuess = compChoices[Math.floor(Math.random()*compChoices.length)];
@@ -49,7 +31,6 @@ $(document).ready(function() {
                 } else if (guessesLeft === 1) {
                     losses++;
                     alert("You lost!!!  The letter was: " + compGuess);
-                    
                     //reset
                     guessesLeft = 9;
                     compGuess = compChoices[Math.floor(Math.random()*compChoices.length)];
@@ -58,29 +39,28 @@ $(document).ready(function() {
                     count = 0;
                 } else {
                     guessesLeft--;
-
                     //push letter to listOfGuesses
                     listOfGuesses.push(userGuess);            
                 }
-                
-               
-                
-                console.log(listOfGuesses);
+                // console.log(listOfGuesses);
                 // console.log(found);
                 // console.log(userGuess);
                 // console.log(compGuess);
             }
         }    
-
-        var html =  "<p>Wins: " + wins + "</p>" +
-                    "<p>Losses: " + losses + "</p>" +
-                    "<p>Guesses Left: " + guessesLeft + "</p>";           
+        var html =  "<p>Wins: " + wins + "</p>" + "<p>Losses: " + losses + "</p>" + "<p>Guesses Left: " + guessesLeft + "</p>";           
         document.querySelector("#game").innerHTML = html;
-
+        // console.log(found);
+        //this function takes the letters inside of listofGuesses and puts them in the html
+        function consoleInside(arr) {
+            if ((!found) && (compChoices.includes(userGuess)) && (listOfGuesses[0])){
+                $('#guesses').append(arr[count] + ', ');
+                count++;
+            } else if (found) {
+                return;
+            } 
+        };
         consoleInside(listOfGuesses);
     }
-
-    
-
 //don't code beneath this
 });
